@@ -38,7 +38,7 @@ class UtmForm
     return
 
   addFormElem: (fieldName, fieldValue) ->
-    if fieldValue != '' and fieldValue != undefined
+    if fieldValue
       fieldEl = document.createElement('input')
       fieldEl.type = "hidden"
       fieldEl.name = fieldName

@@ -235,7 +235,7 @@ UtmForm = (function() {
 
   UtmForm.prototype.addFormElem = function(fieldName, fieldValue) {
     var allForms, fieldEl, firstForm, form, i, len;
-    if (fieldValue !== '' && fieldValue !== void 0) {
+    if (fieldValue) {
       fieldEl = document.createElement('input');
       fieldEl.type = "hidden";
       fieldEl.name = fieldName;
