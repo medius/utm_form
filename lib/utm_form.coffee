@@ -39,21 +39,25 @@ class UtmForm
 
   addFormElem: (fieldName, fieldValue) ->
     if fieldValue
-      fieldEl = document.createElement('input')
-      fieldEl.type = "hidden"
-      fieldEl.name = fieldName
-      fieldEl.value = fieldValue
-
       allForms = document.querySelectorAll('form')
 
       if allForms.length > 0
         if window._addToForm == 'first'
           firstForm = allForms[0]
-          firstForm.insertBefore(fieldEl, firstForm.firstChild)
+          firstForm.insertBefore(@getFieldEl(fieldName, fieldValue), firstForm.firstChild)
         else
           for form in allForms
-            form.insertBefore(fieldEl, form.firstChild)
+            form.insertBefore(@getFieldEl(fieldName, fieldValue), form.firstChild)
     return
+
+  # NOTE: This should be called for each form element or since it
+  # attaches itself to the first form
+  getFieldEl: (fieldName, fieldValue) ->
+    fieldEl = document.createElement('input')
+    fieldEl.type = "hidden"
+    fieldEl.name = fieldName
+    fieldEl.value = fieldValue
+    fieldEl
 
 _uf = window._uf || {}
 window.UtmForm = new UtmForm _uf

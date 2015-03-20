@@ -234,25 +234,30 @@ UtmForm = (function() {
   };
 
   UtmForm.prototype.addFormElem = function(fieldName, fieldValue) {
-    var allForms, fieldEl, firstForm, form, i, len;
+    var allForms, firstForm, form, i, len;
     if (fieldValue) {
-      fieldEl = document.createElement('input');
-      fieldEl.type = "hidden";
-      fieldEl.name = fieldName;
-      fieldEl.value = fieldValue;
       allForms = document.querySelectorAll('form');
       if (allForms.length > 0) {
         if (window._addToForm === 'first') {
           firstForm = allForms[0];
-          firstForm.insertBefore(fieldEl, firstForm.firstChild);
+          firstForm.insertBefore(this.getFieldEl(fieldName, fieldValue), firstForm.firstChild);
         } else {
           for (i = 0, len = allForms.length; i < len; i++) {
             form = allForms[i];
-            form.insertBefore(fieldEl, form.firstChild);
+            form.insertBefore(this.getFieldEl(fieldName, fieldValue), form.firstChild);
           }
         }
       }
     }
+  };
+
+  UtmForm.prototype.getFieldEl = function(fieldName, fieldValue) {
+    var fieldEl;
+    fieldEl = document.createElement('input');
+    fieldEl.type = "hidden";
+    fieldEl.name = fieldName;
+    fieldEl.value = fieldValue;
+    return fieldEl;
   };
 
   return UtmForm;
