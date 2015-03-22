@@ -50,9 +50,9 @@ visited your website 3 times before giving you his email address.
 Let's say your lead generation form looks like this before the script is added.
 ```html
 <form action="//terminusapp.us6.list-manage.com/subscribe/" method="post">
-  <label for="mce-EMAIL">Email Address</label>
-  <input type="email" value="" name="EMAIL" id="mce-EMAIL">
-  <input type="submit" value="Start Learning" name="subscribe">
+  <label for="mce-email">Email Address</label>
+  <input type="email" value="" name="email" id="mce-email">
+  <input type="submit" value="Subscribe" name="subscribe">
 </form>
 ```
 
@@ -68,9 +68,9 @@ Once the script is added, your form will look like this after the page is loaded
   <input type="hidden" name="UMEDIUM" value="social">
   <input type="hidden" name="UCAMPAIGN" value="awareness">
 
-  <label for="mce-EMAIL">Email Address</label>
-  <input type="email" value="" name="EMAIL" id="mce-EMAIL">
-  <input type="submit" value="Start Learning" name="subscribe">
+  <label for="mce-email">Email Address</label>
+  <input type="email" value="" name="email" id="mce-email">
+  <input type="submit" value="Subscribe" name="subscribe">
 </form>
 ```
 
