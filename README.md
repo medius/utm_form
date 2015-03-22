@@ -116,3 +116,17 @@ as a new visit.
 #### Can I look at the code?
 You are on Github and all the code is available above. Knock yourself out. Even better, send a pull request and we can
 make it better together.
+
+## Development
+Utm Form is written in CoffeeScript and compiles to Javascript.
+
+### Setup
+1. Clone the repository
+2. Make sure you have node and npm installed: `brew install node`.
+3. Install the required packages: `npm install`.
+
+### Compiling
+
+Run `gulp build`
+
+This will compile the CoffeeScript and also minify it. The generated files can be found in `dest` folder.
