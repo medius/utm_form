@@ -45,7 +45,41 @@ visited your website 3 times before giving you his email address.
 
   Note: A new visit happens when the visitor comes to your website after more than an hour (customizations).
 
-## Customizations
+## How will my form look like?
+
+Let's say your lead generation form looks like this before the script is added.
+```html
+<form action="//terminusapp.us6.list-manage.com/subscribe/" method="post">
+  <label for="mce-EMAIL">Email Address</label>
+  <input type="email" value="" name="EMAIL" id="mce-EMAIL">
+  <input type="submit" value="Start Learning" name="subscribe">
+</form>
+```
+
+Once the script is added, your form will look like this after the page is loaded.
+
+```html
+<form action="//terminusapp.us6.list-manage.com/subscribe/" method="post">
+  <input type="hidden" name="VISITS" value="5">
+  <input type="hidden" name="IREFERRER" value="http%3A//google.com">
+  <input type="hidden" name="LREFERRER" value="http%3A//twitter.com">
+  <input type="hidden" name="ILANDPAGE" value="http%3A//www.terminusapp.com/blog/">
+  <input type="hidden" name="USOURCE" value="twitter">
+  <input type="hidden" name="UMEDIUM" value="social">
+  <input type="hidden" name="UCAMPAIGN" value="awareness">
+
+  <label for="mce-EMAIL">Email Address</label>
+  <input type="email" value="" name="EMAIL" id="mce-EMAIL">
+  <input type="submit" value="Start Learning" name="subscribe">
+</form>
+```
+
+When someone submits the form, all the extra information is also sent along with the email address.
+
+You'll need to make sure that your form can accept these values. If it is a Mailchimp form, configure it to
+accept these fields. Same for ConstantContact, CampaignMonitor, Hubspot or any other service.
+
+## So you want to customize your forms?
 If you would like to customize how fields get added to your form, you can change it as follows
 
 ```html
@@ -72,9 +106,13 @@ If you would like to customize how fields get added to your form, you can change
 
 ## More Questions?
 #### What happens if someone visits a bunch of pages on my website/blog before filling the form?
-It doesn't matter. As soon as they land on your website, the script saves the information in a cookie. This 
-cookie is valid for 365 days. It then adds this information to your form.
+It doesn't matter. As soon as they land on your website, the script saves the information in a cookie. This
+cookie is valid for 365 days. It adds this information to your form from the saved cookie.
 
 #### What's the session length for?
 It's used to count the number of visits. If someone comes to your website after the session has expired, it will be counted
 as a new visit.
+
+#### Can I look at the code?
+You are on Github and all the code is available above. Knock yourself out. Even better, send a pull request and we can
+make it better together.
