@@ -48,27 +48,27 @@ visited your website 3 times before giving you his email address.
 ## Customizations
 If you would like to customize how fields get added to your form, you can change it as follows
 
-  ```html
-  <script type="text/javascript" charset="utf-8">
-    var _uf = _uf || {};
-    _uf.domain                     = ".example.com";
+```html
+<script type="text/javascript" charset="utf-8">
+  var _uf = _uf || {};
+  _uf.domain                     = ".example.com";
 
-    _uf.utm_source_field           = "YOUR_SOURCE_FIELD"; // Default 'USOURCE'
-    _uf.utm_medium_field           = "YOUR_MEDIUM_FIELD"; // Default 'UMEDIUM'
-    _uf.utm_campaign_field         = "YOUR_CAMPAIGN_FIELD"; // Default 'UCAMPAIGN'
-    _uf.utm_content_field          = "YOUR_CONTENT_FIELD"; // Default 'UCONTENT'
-    _uf.utm_term_field             = "YOUR_TERM_FIELD"; // Default 'UTERM'
+  _uf.utm_source_field           = "YOUR_SOURCE_FIELD"; // Default 'USOURCE'
+  _uf.utm_medium_field           = "YOUR_MEDIUM_FIELD"; // Default 'UMEDIUM'
+  _uf.utm_campaign_field         = "YOUR_CAMPAIGN_FIELD"; // Default 'UCAMPAIGN'
+  _uf.utm_content_field          = "YOUR_CONTENT_FIELD"; // Default 'UCONTENT'
+  _uf.utm_term_field             = "YOUR_TERM_FIELD"; // Default 'UTERM'
 
-    _uf.initial_referrer_field     = "YOUR_INITIAL_REFERRER_FIELD"; // Default 'IREFERRER'
-    _uf.last_referrer_field        = "YOUR_LAST_REFERRER_FIELD"; // Default 'LREFERRER'
-    _uf.initial_landing_page_field = "YOUR_INITIAL_LANDING_PAGE_FIELD"; // Default 'ILANDPAGE'
-    _uf.visits_field               = "YOUR_VISITS_FIELD"; // Default 'VISITS'
+  _uf.initial_referrer_field     = "YOUR_INITIAL_REFERRER_FIELD"; // Default 'IREFERRER'
+  _uf.last_referrer_field        = "YOUR_LAST_REFERRER_FIELD"; // Default 'LREFERRER'
+  _uf.initial_landing_page_field = "YOUR_INITIAL_LANDING_PAGE_FIELD"; // Default 'ILANDPAGE'
+  _uf.visits_field               = "YOUR_VISITS_FIELD"; // Default 'VISITS'
 
-    _uf.sessionLength              = 2; // In hours. Default is 1 hour
-  </script>
+  _uf.sessionLength              = 2; // In hours. Default is 1 hour
+</script>
 
-  <script src="//d12ue6f2329cfl.cloudfront.net/resources/utm_form-1.0.0.min.js async"></script>
-  ```
+<script src="//d12ue6f2329cfl.cloudfront.net/resources/utm_form-1.0.0.min.js async"></script>
+```
 
 ## More Questions?
 #### What happens if someone visits a bunch of pages on my website/blog before filling the form?
