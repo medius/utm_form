@@ -2,6 +2,8 @@
 It adds UTM, referrer, landing page and other information to any lead generation form. It adds this extra information
 as hidden fields on a form.
 
+Here's a blog post discussing it in detail: http://bit.ly/1z0r3dN
+
 ## Why do I need it?
 If you want to know where each email list subscriber or lead is coming from, use this script to help with that. This
 is different from analytics tools where you know this information in aggregate.
