@@ -7,6 +7,8 @@ class UtmForm
     @_utmParamsMap.utm_content  = options.utm_content_field || 'UCONTENT'
     @_utmParamsMap.utm_term     = options.utm_term_field || 'UTERM'
 
+    @_additionalParamsMap       = options.additional_params_map || {}
+
     @_initialReferrerField      = options.initial_referrer_field || 'IREFERRER'
     @_lastReferrerField         = options.last_referrer_field || 'LREFERRER'
     @_initialLandingPageField   = options.initial_landing_page_field || 'ILANDPAGE'
@@ -21,13 +23,17 @@ class UtmForm
     @utmCookie = new UtmCookie({
       domain: options.domain,
       sessionLength: options.sessionLength,
-      cookieExpiryDays: options.cookieExpiryDays })
+      cookieExpiryDays: options.cookieExpiryDays,
+      additionalParams: Object.getOwnPropertyNames(@_additionalParamsMap) })
 
     if @_addToForm != 'none'
       @addAllFields()
 
   addAllFields: ->
     for param, fieldName of @_utmParamsMap
+      @addFormElem fieldName, @utmCookie.readCookie(param)
+
+    for param, fieldName of @_additionalParamsMap
       @addFormElem fieldName, @utmCookie.readCookie(param)
 
     @addFormElem @_initialReferrerField, @utmCookie.initialReferrer()
