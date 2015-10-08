@@ -22,7 +22,7 @@ gulp.task('coffee', function() {
     .pipe(gulp.dest(paths.dest))
 });
 
-gulp.task('uglify', function() {
+gulp.task('uglify', ['coffee'], function() {
   gulp.src(paths.dest + '/' + fullFileName)
     .pipe(uglify({mangle: false}))
     .pipe(rename(minifiedFileName))

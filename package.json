@@ -4,6 +4,7 @@
   "description": "Add UTM parameters and other information to forms",
   "main": "",
   "scripts": {
+    "build": "gulp build",
     "test": ""
   },
   "repository": {
