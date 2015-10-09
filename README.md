@@ -17,6 +17,7 @@ visited your website 3 times before giving you his email address.
 * Last Referrer - The webpage where the visitor came from most recently
 * Initial Landing page - URL of the page on your website where the visitor landed the very first time
 * Number of visits - The number of times the visitor came to your website before filling your form
+* Additional parameters defined in `additional_params_map`
 
 ## How do I use it?
 
@@ -29,7 +30,7 @@ visited your website 3 times before giving you his email address.
     _uf.domain = ".example.com";
   </script>
 
-  <script src="//d12ue6f2329cfl.cloudfront.net/resources/utm_form-1.0.0.min.js" async></script>
+  <script src="//d12ue6f2329cfl.cloudfront.net/resources/utm_form-1.0.1.min.js" async></script>
   ```
 
 2. You need to make your forms accept the new fields. Based on the information available for a visitor, the fields added
@@ -99,11 +100,13 @@ If you would like to customize how fields get added to your form, you can change
   _uf.last_referrer_field        = "YOUR_LAST_REFERRER_FIELD"; // Default 'LREFERRER'
   _uf.initial_landing_page_field = "YOUR_INITIAL_LANDING_PAGE_FIELD"; // Default 'ILANDPAGE'
   _uf.visits_field               = "YOUR_VISITS_FIELD"; // Default 'VISITS'
-
+  _uf.additional_params_map      = {
+    affiliate: "AFFILIATE"
+  }; // Maps affiliate parameter to AFFILIATE form field
   _uf.sessionLength              = 2; // In hours. Default is 1 hour
 </script>
 
-<script src="//d12ue6f2329cfl.cloudfront.net/resources/utm_form-1.0.0.min.js async"></script>
+<script src="//d12ue6f2329cfl.cloudfront.net/resources/utm_form-1.0.1.min.js async"></script>
 ```
 
 ## More Questions?
