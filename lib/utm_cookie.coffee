@@ -4,6 +4,7 @@ class UtmCookie
     @_domain = options.domain
     @_sessionLength = options.sessionLength || 1
     @_cookieExpiryDays = options.cookieExpiryDays || 365
+    @_additionalParams = options.additionalParams || []
     @_utmParams = [
       'utm_source'
       'utm_medium'
@@ -16,6 +17,9 @@ class UtmCookie
     @writeLastReferrer()
     @writeInitialLandingPageUrl()
     @setCurrentSession()
+
+    if @additionalParamsPresentInUrl()
+      @writeAdditionalParams()
 
     if @utmPresentInUrl()
       @writeUtmCookieFromParams()
@@ -63,15 +67,26 @@ class UtmCookie
     else
       ''
 
+  additionalParamsPresentInUrl: ->
+    for param in @_additionalParams
+      if @getParameterByName(param)
+        return true
+    return false
+
   utmPresentInUrl: ->
-    present = false
     for param in @_utmParams
       if @getParameterByName(param)
-        present = true
-    present
+        return true
+    return false
 
   writeCookie: (name, value) ->
     @createCookie name, value, @_cookieExpiryDays, null, @_domain
+    return
+
+  writeAdditionalParams: ->
+    for param in @_additionalParams
+      value = @getParameterByName(param)
+      @writeCookie param, value
     return
 
   writeUtmCookieFromParams: ->

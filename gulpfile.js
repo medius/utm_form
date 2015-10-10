@@ -1,4 +1,5 @@
 var gulp = require('gulp');
+var clean = require('gulp-clean');
 var coffee = require('gulp-coffee');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
@@ -15,18 +16,17 @@ var fileName = 'utm_form' + '-' + package_json.version;
 var fullFileName = fileName + '.js';
 var minifiedFileName = fileName + '.min.js';
 
-gulp.task('coffee', function() {
+gulp.task('clean', function() {
+  gulp.src(paths.dest)
+    .pipe(clean())
+});
+
+gulp.task('build', ['clean'], function() {
   gulp.src(paths.scripts)
     .pipe(coffee({bare: true}).on('error', gutil.log))
     .pipe(concat(fullFileName))
     .pipe(gulp.dest(paths.dest))
-});
-
-gulp.task('uglify', function() {
-  gulp.src(paths.dest + '/' + fullFileName)
     .pipe(uglify({mangle: false}))
     .pipe(rename(minifiedFileName))
     .pipe(gulp.dest(paths.dest))
 });
-
-gulp.task('build', ['coffee', 'uglify'])

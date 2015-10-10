@@ -9,11 +9,15 @@ UtmCookie = (function() {
     this._domain = options.domain;
     this._sessionLength = options.sessionLength || 1;
     this._cookieExpiryDays = options.cookieExpiryDays || 365;
+    this._additionalParams = options.additionalParams || [];
     this._utmParams = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'];
     this.writeInitialReferrer();
     this.writeLastReferrer();
     this.writeInitialLandingPageUrl();
     this.setCurrentSession();
+    if (this.additionalParamsPresentInUrl()) {
+      this.writeAdditionalParams();
+    }
     if (this.utmPresentInUrl()) {
       this.writeUtmCookieFromParams();
     }
@@ -70,21 +74,42 @@ UtmCookie = (function() {
     }
   };
 
+  UtmCookie.prototype.additionalParamsPresentInUrl = function() {
+    var j, len, param, ref;
+    ref = this._additionalParams;
+    for (j = 0, len = ref.length; j < len; j++) {
+      param = ref[j];
+      if (this.getParameterByName(param)) {
+        return true;
+      }
+    }
+    return false;
+  };
+
   UtmCookie.prototype.utmPresentInUrl = function() {
-    var j, len, param, present, ref;
-    present = false;
+    var j, len, param, ref;
     ref = this._utmParams;
     for (j = 0, len = ref.length; j < len; j++) {
       param = ref[j];
       if (this.getParameterByName(param)) {
-        present = true;
+        return true;
       }
     }
-    return present;
+    return false;
   };
 
   UtmCookie.prototype.writeCookie = function(name, value) {
     this.createCookie(name, value, this._cookieExpiryDays, null, this._domain);
+  };
+
+  UtmCookie.prototype.writeAdditionalParams = function() {
+    var j, len, param, ref, value;
+    ref = this._additionalParams;
+    for (j = 0, len = ref.length; j < len; j++) {
+      param = ref[j];
+      value = this.getParameterByName(param);
+      this.writeCookie(param, value);
+    }
   };
 
   UtmCookie.prototype.writeUtmCookieFromParams = function() {
@@ -205,6 +230,7 @@ UtmForm = (function() {
     this._utmParamsMap.utm_campaign = options.utm_campaign_field || 'UCAMPAIGN';
     this._utmParamsMap.utm_content = options.utm_content_field || 'UCONTENT';
     this._utmParamsMap.utm_term = options.utm_term_field || 'UTERM';
+    this._additionalParamsMap = options.additional_params_map || {};
     this._initialReferrerField = options.initial_referrer_field || 'IREFERRER';
     this._lastReferrerField = options.last_referrer_field || 'LREFERRER';
     this._initialLandingPageField = options.initial_landing_page_field || 'ILANDPAGE';
@@ -213,7 +239,8 @@ UtmForm = (function() {
     this.utmCookie = new UtmCookie({
       domain: options.domain,
       sessionLength: options.sessionLength,
-      cookieExpiryDays: options.cookieExpiryDays
+      cookieExpiryDays: options.cookieExpiryDays,
+      additionalParams: Object.getOwnPropertyNames(this._additionalParamsMap)
     });
     if (this._addToForm !== 'none') {
       this.addAllFields();
@@ -221,10 +248,15 @@ UtmForm = (function() {
   }
 
   UtmForm.prototype.addAllFields = function() {
-    var fieldName, param, ref;
+    var fieldName, param, ref, ref1;
     ref = this._utmParamsMap;
     for (param in ref) {
       fieldName = ref[param];
+      this.addFormElem(fieldName, this.utmCookie.readCookie(param));
+    }
+    ref1 = this._additionalParamsMap;
+    for (param in ref1) {
+      fieldName = ref1[param];
       this.addFormElem(fieldName, this.utmCookie.readCookie(param));
     }
     this.addFormElem(this._initialReferrerField, this.utmCookie.initialReferrer());
