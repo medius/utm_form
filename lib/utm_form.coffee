@@ -20,6 +20,10 @@ class UtmForm
     # "all": (Default) Add UTM and other fields to all forms on the page
     @_addToForm                 = options.add_to_form || 'all';
 
+    # Option to configure the form query selector to further restrict form
+    # decoration, e.g. 'form[action="/sign_up"]'
+    @_formQuerySelector         = options.form_query_selector || 'form';
+
     @utmCookie = new UtmCookie({
       domain: options.domain,
       sessionLength: options.sessionLength,
@@ -45,7 +49,7 @@ class UtmForm
 
   addFormElem: (fieldName, fieldValue) ->
     if fieldValue
-      allForms = document.querySelectorAll('form')
+      allForms = document.querySelectorAll(@_formQuerySelector)
 
       if allForms.length > 0
         if @_addToForm == 'first'
