@@ -48,7 +48,7 @@ class UtmForm
       allForms = document.querySelectorAll('form')
 
       if allForms.length > 0
-        if window._addToForm == 'first'
+        if @_addToForm == 'first'
           firstForm = allForms[0]
           firstForm.insertBefore(@getFieldEl(fieldName, fieldValue), firstForm.firstChild)
         else
