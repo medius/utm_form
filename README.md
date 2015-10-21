@@ -104,6 +104,8 @@ If you would like to customize how fields get added to your form, you can change
     affiliate: "AFFILIATE"
   }; // Maps affiliate parameter to AFFILIATE form field
   _uf.sessionLength              = 2; // In hours. Default is 1 hour
+  _uf.add_to_form                = "first"; // 'none', 'all', 'first'. Default is 'all'
+  _uf.form_query_selector        = 'form[action="/sign_up"]'; // custom form selector. Default is 'form', to select any form.
 </script>
 
 <script src="//d12ue6f2329cfl.cloudfront.net/resources/utm_form-1.0.1.min.js async"></script>

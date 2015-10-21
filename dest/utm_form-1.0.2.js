@@ -236,6 +236,7 @@ UtmForm = (function() {
     this._initialLandingPageField = options.initial_landing_page_field || 'ILANDPAGE';
     this._visitsField = options.visits_field || 'VISITS';
     this._addToForm = options.add_to_form || 'all';
+    this._formQuerySelector = options.form_query_selector || 'form';
     this.utmCookie = new UtmCookie({
       domain: options.domain,
       sessionLength: options.sessionLength,
@@ -268,9 +269,9 @@ UtmForm = (function() {
   UtmForm.prototype.addFormElem = function(fieldName, fieldValue) {
     var allForms, firstForm, form, i, len;
     if (fieldValue) {
-      allForms = document.querySelectorAll('form');
+      allForms = document.querySelectorAll(this._formQuerySelector);
       if (allForms.length > 0) {
-        if (window._addToForm === 'first') {
+        if (this._addToForm === 'first') {
           firstForm = allForms[0];
           firstForm.insertBefore(this.getFieldEl(fieldName, fieldValue), firstForm.firstChild);
         } else {
