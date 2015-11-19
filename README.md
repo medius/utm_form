@@ -30,7 +30,7 @@ visited your website 3 times before giving you his email address.
     _uf.domain = ".example.com";
   </script>
 
-  <script src="//d12ue6f2329cfl.cloudfront.net/resources/utm_form-1.0.1.min.js" async></script>
+  <script src="//d12ue6f2329cfl.cloudfront.net/resources/utm_form-1.0.2.min.js" async></script>
   ```
 
 2. You need to make your forms accept the new fields. Based on the information available for a visitor, the fields added
@@ -108,7 +108,7 @@ If you would like to customize how fields get added to your form, you can change
   _uf.form_query_selector        = 'form[action="/sign_up"]'; // custom form selector. Default is 'form', to select any form.
 </script>
 
-<script src="//d12ue6f2329cfl.cloudfront.net/resources/utm_form-1.0.1.min.js async"></script>
+<script src="//d12ue6f2329cfl.cloudfront.net/resources/utm_form-1.0.2.min.js async"></script>
 ```
 
 ## More Questions?
