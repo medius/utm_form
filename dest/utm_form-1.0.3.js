@@ -273,11 +273,11 @@ UtmForm = (function() {
       if (allForms.length > 0) {
         if (this._addToForm === 'first') {
           firstForm = allForms[0];
-          firstForm.insertBefore(this.getFieldEl(fieldName, fieldValue), firstForm.firstChild);
+          this.insertAfter(this.getFieldEl(fieldName, fieldValue), firstForm.lastChild);
         } else {
           for (i = 0, len = allForms.length; i < len; i++) {
             form = allForms[i];
-            form.insertBefore(this.getFieldEl(fieldName, fieldValue), form.firstChild);
+            this.insertAfter(this.getFieldEl(fieldName, fieldValue), form.lastChild);
           }
         }
       }
@@ -291,6 +291,10 @@ UtmForm = (function() {
     fieldEl.name = fieldName;
     fieldEl.value = fieldValue;
     return fieldEl;
+  };
+
+  UtmForm.prototype.insertAfter = function(newNode, referenceNode) {
+    return referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
   };
 
   return UtmForm;
