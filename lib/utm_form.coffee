@@ -54,10 +54,10 @@ class UtmForm
       if allForms.length > 0
         if @_addToForm == 'first'
           firstForm = allForms[0]
-          firstForm.insertBefore(@getFieldEl(fieldName, fieldValue), firstForm.firstChild)
+          @insertAfter(@getFieldEl(fieldName, fieldValue), firstForm.lastChild)
         else
           for form in allForms
-            form.insertBefore(@getFieldEl(fieldName, fieldValue), form.firstChild)
+            @insertAfter(@getFieldEl(fieldName, fieldValue), form.lastChild)
     return
 
   # NOTE: This should be called for each form element or since it
@@ -68,6 +68,9 @@ class UtmForm
     fieldEl.name = fieldName
     fieldEl.value = fieldValue
     fieldEl
+
+  insertAfter: (newNode, referenceNode) ->
+    referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling)
 
 _uf = window._uf || {}
 window.UtmForm = new UtmForm _uf
