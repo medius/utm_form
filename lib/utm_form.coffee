@@ -44,6 +44,7 @@ class UtmForm
     @addFormElem @_lastReferrerField, @utmCookie.lastReferrer()
     @addFormElem @_initialLandingPageField, @utmCookie.initialLandingPageUrl()
     @addFormElem @_visitsField, @utmCookie.visits()
+    setTimeout @addAllFields.bind(this), 1000
 
     return
 
@@ -52,12 +53,19 @@ class UtmForm
       allForms = document.querySelectorAll(@_formQuerySelector)
 
       if allForms.length > 0
+        len = allForms.length
         if @_addToForm == 'first'
-          firstForm = allForms[0]
-          @insertAfter(@getFieldEl(fieldName, fieldValue), firstForm.lastChild)
-        else
-          for form in allForms
-            @insertAfter(@getFieldEl(fieldName, fieldValue), form.lastChild)
+          len = 1
+
+        i = 0
+        while i < len
+          form = allForms[i]
+          form._utm_tagged = form._utm_tagged or {}
+          if !form._utm_tagged[fieldName]
+            form._utm_tagged[fieldName] = true
+            @insertAfter @getFieldEl(fieldName, fieldValue), form.lastChild
+          i++
+
     return
 
   # NOTE: This should be called for each form element or since it

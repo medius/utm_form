@@ -268,7 +268,7 @@ UtmForm = (function() {
   };
 
   UtmForm.prototype.addFormElem = function(fieldName, fieldValue) {
-    var allForms, firstForm, form, i, len;
+    var allForms, form, i, len;
     if (fieldValue) {
       allForms = document.querySelectorAll(this._formQuerySelector);
       if (allForms.length > 0) {
@@ -276,13 +276,15 @@ UtmForm = (function() {
         if (this._addToForm === 'first') {
           len = 1;
         }
-        for (i = 0; i < len; i++) {
+        i = 0;
+        while (i < len) {
           form = allForms[i];
           form._utm_tagged = form._utm_tagged || {};
           if (!form._utm_tagged[fieldName]) {
             form._utm_tagged[fieldName] = true;
             this.insertAfter(this.getFieldEl(fieldName, fieldValue), form.lastChild);
           }
+          i++;
         }
       }
     }
