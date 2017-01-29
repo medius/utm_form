@@ -264,6 +264,7 @@ UtmForm = (function() {
     this.addFormElem(this._lastReferrerField, this.utmCookie.lastReferrer());
     this.addFormElem(this._initialLandingPageField, this.utmCookie.initialLandingPageUrl());
     this.addFormElem(this._visitsField, this.utmCookie.visits());
+    setTimeout(this.addAllFields.bind(this), 1000);
   };
 
   UtmForm.prototype.addFormElem = function(fieldName, fieldValue) {
@@ -271,12 +272,15 @@ UtmForm = (function() {
     if (fieldValue) {
       allForms = document.querySelectorAll(this._formQuerySelector);
       if (allForms.length > 0) {
+        len = allForms.length;
         if (this._addToForm === 'first') {
-          firstForm = allForms[0];
-          this.insertAfter(this.getFieldEl(fieldName, fieldValue), firstForm.lastChild);
-        } else {
-          for (i = 0, len = allForms.length; i < len; i++) {
-            form = allForms[i];
+          len = 1;
+        }
+        for (i = 0; i < len; i++) {
+          form = allForms[i];
+          form._utm_tagged = form._utm_tagged || {};
+          if (!form._utm_tagged[fieldName]) {
+            form._utm_tagged[fieldName] = true;
             this.insertAfter(this.getFieldEl(fieldName, fieldValue), form.lastChild);
           }
         }
