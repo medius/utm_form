@@ -243,51 +243,49 @@ UtmForm = (function() {
       cookieExpiryDays: options.cookieExpiryDays,
       additionalParams: Object.getOwnPropertyNames(this._additionalParamsMap)
     });
-    if (this._addToForm !== 'none') {
-      this.addAllFields();
-    }
+    this.addAllFields();
   }
 
   UtmForm.prototype.addAllFields = function() {
-    var fieldName, param, ref, ref1;
-    ref = this._utmParamsMap;
-    for (param in ref) {
-      fieldName = ref[param];
-      this.addFormElem(fieldName, this.utmCookie.readCookie(param));
+    var allForms, i, len;
+    allForms = document.querySelectorAll(this._formQuerySelector);
+    if (this._addToForm === 'none') {
+      len = 0;
+    } else if (this._addToForm === 'first') {
+      len = Math.min(1, allForms.length);
+    } else {
+      len = allForms.length;
     }
-    ref1 = this._additionalParamsMap;
-    for (param in ref1) {
-      fieldName = ref1[param];
-      this.addFormElem(fieldName, this.utmCookie.readCookie(param));
+    i = 0;
+    while (i < len) {
+      this.addAllFieldsToForm(allForms[i]);
+      i++;
     }
-    this.addFormElem(this._initialReferrerField, this.utmCookie.initialReferrer());
-    this.addFormElem(this._lastReferrerField, this.utmCookie.lastReferrer());
-    this.addFormElem(this._initialLandingPageField, this.utmCookie.initialLandingPageUrl());
-    this.addFormElem(this._visitsField, this.utmCookie.visits());
-    setTimeout(this.addAllFields.bind(this), 1000);
   };
 
-  UtmForm.prototype.addFormElem = function(fieldName, fieldValue) {
-    var allForms, form, i, len;
-    if (fieldValue) {
-      allForms = document.querySelectorAll(this._formQuerySelector);
-      if (allForms.length > 0) {
-        len = allForms.length;
-        if (this._addToForm === 'first') {
-          len = 1;
-        }
-        i = 0;
-        while (i < len) {
-          form = allForms[i];
-          form._utm_tagged = form._utm_tagged || {};
-          if (!form._utm_tagged[fieldName]) {
-            form._utm_tagged[fieldName] = true;
-            this.insertAfter(this.getFieldEl(fieldName, fieldValue), form.lastChild);
-          }
-          i++;
-        }
+  UtmForm.prototype.addAllFieldsToForm = function(form) {
+    var fieldName, param, ref, ref1;
+    if (form && !form._utm_tagged) {
+      form._utm_tagged = true;
+      ref = this._utmParamsMap;
+      for (param in ref) {
+        fieldName = ref[param];
+        this.addFormElem(form, fieldName, this.utmCookie.readCookie(param));
       }
+      ref1 = this._additionalParamsMap;
+      for (param in ref1) {
+        fieldName = ref1[param];
+        this.addFormElem(form, fieldName, this.utmCookie.readCookie(param));
+      }
+      this.addFormElem(form, this._initialReferrerField, this.utmCookie.initialReferrer());
+      this.addFormElem(form, this._lastReferrerField, this.utmCookie.lastReferrer());
+      this.addFormElem(form, this._initialLandingPageField, this.utmCookie.initialLandingPageUrl());
+      this.addFormElem(form, this._visitsField, this.utmCookie.visits());
     }
+  };
+
+  UtmForm.prototype.addFormElem = function(form, fieldName, fieldValue) {
+    this.insertAfter(this.getFieldEl(fieldName, fieldValue), form.lastChild);
   };
 
   UtmForm.prototype.getFieldEl = function(fieldName, fieldValue) {
