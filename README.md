@@ -33,6 +33,8 @@ visited your website 3 times before giving you his email address.
   <script src="//d12ue6f2329cfl.cloudfront.net/resources/utm_form-1.0.2.min.js" async></script>
   ```
 
+  There might be newer versions available in `dest` folder that are not yet available via CDN. Feel free to download the latest files in that case.
+
 2. You need to make your forms accept the new fields. Based on the information available for a visitor, the fields added
   to your form will be,
 
