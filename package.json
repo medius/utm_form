@@ -1,6 +1,6 @@
 {
   "name": "utm-form",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Add UTM parameters and other information to forms",
   "main": "",
   "scripts": {

@@ -30,34 +30,44 @@ class UtmForm
       cookieExpiryDays: options.cookieExpiryDays,
       additionalParams: Object.getOwnPropertyNames(@_additionalParamsMap) })
 
-    if @_addToForm != 'none'
-      @addAllFields()
+    @addAllFields()
 
   addAllFields: ->
-    for param, fieldName of @_utmParamsMap
-      @addFormElem fieldName, @utmCookie.readCookie(param)
+    allForms = document.querySelectorAll(@_formQuerySelector)
+    if @_addToForm == 'none'
+      len = 0
+    else if @_addToForm == 'first'
+      len = Math.min 1, allForms.length
+    else
+      len = allForms.length
 
-    for param, fieldName of @_additionalParamsMap
-      @addFormElem fieldName, @utmCookie.readCookie(param)
-
-    @addFormElem @_initialReferrerField, @utmCookie.initialReferrer()
-    @addFormElem @_lastReferrerField, @utmCookie.lastReferrer()
-    @addFormElem @_initialLandingPageField, @utmCookie.initialLandingPageUrl()
-    @addFormElem @_visitsField, @utmCookie.visits()
+    i = 0
+    while i < len
+      @addAllFieldsToForm allForms[i]
+      i++
 
     return
 
-  addFormElem: (fieldName, fieldValue) ->
-    if fieldValue
-      allForms = document.querySelectorAll(@_formQuerySelector)
+  addAllFieldsToForm: (form) ->
+    if form && !form._utm_tagged
+      form._utm_tagged = true
 
-      if allForms.length > 0
-        if @_addToForm == 'first'
-          firstForm = allForms[0]
-          @insertAfter(@getFieldEl(fieldName, fieldValue), firstForm.lastChild)
-        else
-          for form in allForms
-            @insertAfter(@getFieldEl(fieldName, fieldValue), form.lastChild)
+      for param, fieldName of @_utmParamsMap
+        @addFormElem form, fieldName, @utmCookie.readCookie(param)
+
+      for param, fieldName of @_additionalParamsMap
+        @addFormElem form, fieldName, @utmCookie.readCookie(param)
+
+      @addFormElem form, @_initialReferrerField, @utmCookie.initialReferrer()
+      @addFormElem form, @_lastReferrerField, @utmCookie.lastReferrer()
+      @addFormElem form, @_initialLandingPageField, @utmCookie.initialLandingPageUrl()
+      @addFormElem form, @_visitsField, @utmCookie.visits()
+
+    return
+
+  addFormElem: (form, fieldName, fieldValue) ->
+    @insertAfter @getFieldEl(fieldName, fieldValue), form.lastChild
+
     return
 
   # NOTE: This should be called for each form element or since it
