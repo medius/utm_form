@@ -30,7 +30,7 @@ visited your website 3 times before giving you his email address.
     _uf.domain = ".example.com";
   </script>
 
-  <script src="//d12ue6f2329cfl.cloudfront.net/resources/utm_form-1.0.2.min.js" async></script>
+  <script src="https://d12ue6f2329cfl.cloudfront.net/resources/utm_form-1.0.4.min.js" async></script>
   ```
 
   There might be newer versions available in `dest` folder that are not yet available via CDN. Feel free to download the latest files in that case.
@@ -110,7 +110,7 @@ If you would like to customize how fields get added to your form, you can change
   _uf.form_query_selector        = 'form[action="/sign_up"]'; // custom form selector. Default is 'form', to select any form.
 </script>
 
-<script src="//d12ue6f2329cfl.cloudfront.net/resources/utm_form-1.0.2.min.js async"></script>
+<script src="https://d12ue6f2329cfl.cloudfront.net/resources/utm_form-1.0.4.min.js" async></script>
 ```
 
 ## More Questions?
