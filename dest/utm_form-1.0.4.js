@@ -233,6 +233,7 @@ UtmForm = class UtmForm {
     // "all": (Default) Add UTM and other fields to all forms on the page
     this._addToForm = options.add_to_form || 'all';
     this._formQuerySelector = options.form_query_selector || 'form';
+    this._decodeURIs = options.decode_uris || false;
     this.utmCookie = new UtmCookie({
       domain: options.domain,
       sessionLength: options.sessionLength,
@@ -291,7 +292,7 @@ UtmForm = class UtmForm {
     fieldEl = document.createElement('input');
     fieldEl.type = "hidden";
     fieldEl.name = fieldName;
-    fieldEl.value = fieldValue;
+    fieldEl.value = this._decodeURIs ? decodeURIComponent(fieldValue) : fieldValue;
     return fieldEl;
   }
 
