@@ -24,6 +24,11 @@ class UtmForm
     # decoration, e.g. 'form[action="/sign_up"]'
     @_formQuerySelector         = options.form_query_selector || 'form';
 
+    # If enabled, <input> value="" fields will be run through
+    # decodeURIComponent() first before being outputted. This fixes
+    # URLs looking strange, such as "https%3A//" instead of "https://"
+    @_decodeURIs                = options.decode_uris || false;
+
     @utmCookie = new UtmCookie({
       domain: options.domain,
       sessionLength: options.sessionLength,
@@ -76,7 +81,7 @@ class UtmForm
     fieldEl = document.createElement('input')
     fieldEl.type = "hidden"
     fieldEl.name = fieldName
-    fieldEl.value = fieldValue
+    fieldEl.value = if @_decodeURIs then decodeURIComponent(fieldValue) else fieldValue
     fieldEl
 
   insertAfter: (newNode, referenceNode) ->
