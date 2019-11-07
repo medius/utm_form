@@ -30,7 +30,7 @@ visited your website 3 times before giving you his email address.
     _uf.domain = ".example.com";
   </script>
 
-  <script src="https://d12ue6f2329cfl.cloudfront.net/resources/utm_form-1.0.4.min.js" async></script>
+  <script src="https://d12ue6f2329cfl.cloudfront.net/resources/utm_form-1.1.0.min.js" async></script>
   ```
 
   There might be newer versions available in `dest` folder that are not yet available via CDN. Feel free to download the latest files in that case.
@@ -48,7 +48,7 @@ visited your website 3 times before giving you his email address.
   * ILANDPAGE - Initial landing page
   * VISITS - Number of visits
 
-  Note: A new visit happens when the visitor comes to your website after more than an hour (customizations).
+  Note: A new visit happens when the visitor comes to your website after more than an hour (can be customized as shown below).
 
 ## How will my form look like?
 
@@ -84,8 +84,8 @@ When someone submits the form, all the extra information is also sent along with
 You'll need to make sure that your form can accept these values. If it is a Mailchimp form, configure it to
 accept these fields. Same for ConstantContact, CampaignMonitor, Hubspot or any other service.
 
-## So you want to customize your forms?
-If you would like to customize how fields get added to your form, you can change it as follows
+## Customize your forms
+If you would like to customize how fields get added to your form, following options are available:
 
 ```html
 <script type="text/javascript" charset="utf-8">
@@ -108,9 +108,11 @@ If you would like to customize how fields get added to your form, you can change
   _uf.sessionLength              = 2; // In hours. Default is 1 hour
   _uf.add_to_form                = "first"; // 'none', 'all', 'first'. Default is 'all'
   _uf.form_query_selector        = 'form[action="/sign_up"]'; // custom form selector. Default is 'form', to select any form.
+  _uf.decode_uris                = true; // Decode URLs before populating the form. e.g. use "https://" instead of "https%3A//".
+                                         // NOTE: This will decode the entire URL and, in rare cases, may have side effects.
 </script>
 
-<script src="https://d12ue6f2329cfl.cloudfront.net/resources/utm_form-1.0.4.min.js" async></script>
+<script src="https://d12ue6f2329cfl.cloudfront.net/resources/utm_form-1.1.0.min.js" async></script>
 ```
 
 ## More Questions?
