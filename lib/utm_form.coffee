@@ -31,6 +31,7 @@ class UtmForm
 
     @utmCookie = new UtmCookie({
       domain: options.domain,
+      secure: options.secure,
       sessionLength: options.sessionLength,
       cookieExpiryDays: options.cookieExpiryDays,
       additionalParams: Object.getOwnPropertyNames(@_additionalParamsMap) })

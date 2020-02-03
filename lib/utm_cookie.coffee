@@ -2,6 +2,7 @@ class UtmCookie
   constructor: (options = {}) ->
     @_cookieNamePrefix = '_uc_'
     @_domain = options.domain
+    @_secure = options.secure || false
     @_sessionLength = options.sessionLength || 1
     @_cookieExpiryDays = options.cookieExpiryDays || 365
     @_additionalParams = options.additionalParams || []
@@ -36,7 +37,7 @@ class UtmCookie
     cookieExpire = if expireDate? then '; expires=' + expireDate.toGMTString() else ''
     cookiePath = if path? then '; path=' + path else '; path=/'
     cookieDomain = if domain? then '; domain=' + domain else ''
-    cookieSecure = if secure? then '; secure' else ''
+    cookieSecure = if secure isnt false then '; secure' else ''
     document.cookie = @_cookieNamePrefix + name + '=' + escape(value) + cookieExpire + cookiePath + cookieDomain + cookieSecure
     return
 
@@ -54,7 +55,7 @@ class UtmCookie
     null
 
   eraseCookie: (name) ->
-    @createCookie name, '', -1, null, @_domain
+    @createCookie name, '', -1, null, @_domain, @_secure
     return
 
   getParameterByName: (name) ->
@@ -80,7 +81,7 @@ class UtmCookie
     return false
 
   writeCookie: (name, value) ->
-    @createCookie name, value, @_cookieExpiryDays, null, @_domain
+    @createCookie name, value, @_cookieExpiryDays, null, @_domain, @_secure
     return
 
   writeAdditionalParams: ->
@@ -155,7 +156,7 @@ class UtmCookie
     cookieName = 'current_session'
     existingValue = @readCookie(cookieName)
     if !existingValue
-      @createCookie cookieName, 'true', @_sessionLength / 24, null, @_domain
+      @createCookie cookieName, 'true', @_sessionLength / 24, null, @_domain, @_secure
       @incrementVisitCount()
     return
 
