@@ -141,7 +141,6 @@ class UtmCookie
   incrementVisitCount: ->
     cookieName = 'visits'
     existingValue = parseInt(@readCookie(cookieName), 10)
-    newValue = 1
     if isNaN(existingValue)
       newValue = 1
     else
