@@ -2,9 +2,12 @@ class UtmCookie
   constructor: (options = {}) ->
     @_cookieNamePrefix = '_uc_'
     @_domain = options.domain
+    @_secure = options.secure || false
+    @_initialUtmParams = options.initialUtmParams || false
     @_sessionLength = options.sessionLength || 1
     @_cookieExpiryDays = options.cookieExpiryDays || 365
     @_additionalParams = options.additionalParams || []
+    @_additionalInitialParams = options.additionalInitialParams || []
     @_utmParams = [
       'utm_source'
       'utm_medium'
@@ -16,7 +19,11 @@ class UtmCookie
     @writeInitialReferrer()
     @writeLastReferrer()
     @writeInitialLandingPageUrl()
+    @writeAdditionalInitialParams()
     @setCurrentSession()
+
+    if @_initialUtmParams
+      @writeInitialUtmCookieFromParams()
 
     if @additionalParamsPresentInUrl()
       @writeAdditionalParams()
@@ -36,7 +43,7 @@ class UtmCookie
     cookieExpire = if expireDate? then '; expires=' + expireDate.toGMTString() else ''
     cookiePath = if path? then '; path=' + path else '; path=/'
     cookieDomain = if domain? then '; domain=' + domain else ''
-    cookieSecure = if secure? then '; secure' else ''
+    cookieSecure = if secure then '; secure' else ''
     document.cookie = @_cookieNamePrefix + name + '=' + escape(value) + cookieExpire + cookiePath + cookieDomain + cookieSecure
     return
 
@@ -54,7 +61,7 @@ class UtmCookie
     null
 
   eraseCookie: (name) ->
-    @createCookie name, '', -1, null, @_domain
+    @createCookie name, '', -1, null, @_domain, @_secure
     return
 
   getParameterByName: (name) ->
@@ -80,7 +87,13 @@ class UtmCookie
     return false
 
   writeCookie: (name, value) ->
-    @createCookie name, value, @_cookieExpiryDays, null, @_domain
+    @createCookie name, value, @_cookieExpiryDays, null, @_domain, @_secure
+    return
+
+  writeCookieOnce: (name, value) ->
+    existingValue = @readCookie(name)
+    if !existingValue
+      @writeCookie name, value
     return
 
   writeAdditionalParams: ->
@@ -89,16 +102,24 @@ class UtmCookie
       @writeCookie param, value
     return
 
+  writeAdditionalInitialParams: ->
+    for param in @_additionalInitialParams
+      name = 'initial_' + param
+      value = @getParameterByName(param) || null
+      @writeCookieOnce name, value
+    return
+
   writeUtmCookieFromParams: ->
     for param in @_utmParams
       value = @getParameterByName(param)
       @writeCookie param, value
     return
 
-  writeCookieOnce: (name, value) ->
-    existingValue = @readCookie(name)
-    if !existingValue
-      @writeCookie name, value
+  writeInitialUtmCookieFromParams: ->
+    for param in @_utmParams
+      name = 'initial_' + param
+      value = @getParameterByName(param) || null
+      @writeCookieOnce name, value
     return
 
   _sameDomainReferrer: (referrer) ->
@@ -141,7 +162,6 @@ class UtmCookie
   incrementVisitCount: ->
     cookieName = 'visits'
     existingValue = parseInt(@readCookie(cookieName), 10)
-    newValue = 1
     if isNaN(existingValue)
       newValue = 1
     else
@@ -156,7 +176,7 @@ class UtmCookie
     cookieName = 'current_session'
     existingValue = @readCookie(cookieName)
     if !existingValue
-      @createCookie cookieName, 'true', @_sessionLength / 24, null, @_domain
+      @createCookie cookieName, 'true', @_sessionLength / 24, null, @_domain, @_secure
       @incrementVisitCount()
     return
 
