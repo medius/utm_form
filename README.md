@@ -32,7 +32,7 @@ visited your website 3 times before giving you his email address.
     _uf.domain = ".example.com";
   </script>
 
-  <script src="https://d12ue6f2329cfl.cloudfront.net/resources/utm_form-1.1.0.min.js" async></script>
+  <script src="https://d12ue6f2329cfl.cloudfront.net/resources/utm_form-1.2.0.min.js" async></script>
   ```
 
   There might be newer versions available in `dest` folder that are not yet available via CDN. Feel free to download the latest files in that case.
@@ -127,7 +127,7 @@ If you would like to customize how fields get added to your form, following opti
                                          // NOTE: This will decode the entire URL and, in rare cases, may have side effects.
 </script>
 
-<script src="https://d12ue6f2329cfl.cloudfront.net/resources/utm_form-1.1.0.min.js" async></script>
+<script src="https://d12ue6f2329cfl.cloudfront.net/resources/utm_form-1.2.0.min.js" async></script>
 ```
 
 ## More Questions?
