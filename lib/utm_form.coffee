@@ -7,7 +7,15 @@ class UtmForm
     @_utmParamsMap.utm_content  = options.utm_content_field || 'UCONTENT'
     @_utmParamsMap.utm_term     = options.utm_term_field || 'UTERM'
 
-    @_additionalParamsMap       = options.additional_params_map || {}
+    @_initialUtmParamsMap = {}
+    @_initialUtmParamsMap.initial_utm_source   = options.initial_utm_source_field || 'IUSOURCE'
+    @_initialUtmParamsMap.initial_utm_medium   = options.initial_utm_medium_field || 'IUMEDIUM'
+    @_initialUtmParamsMap.initial_utm_campaign = options.initial_utm_campaign_field || 'IUCAMPAIGN'
+    @_initialUtmParamsMap.initial_utm_content  = options.initial_utm_content_field || 'IUCONTENT'
+    @_initialUtmParamsMap.initial_utm_term     = options.initial_utm_term_field || 'IUTERM'
+
+    @_additionalParamsMap        = options.additional_params_map || {}
+    @_additionalInitialParamsMap = options.additional_initial_params_map || {}
 
     @_initialReferrerField      = options.initial_referrer_field || 'IREFERRER'
     @_lastReferrerField         = options.last_referrer_field || 'LREFERRER'
@@ -34,7 +42,9 @@ class UtmForm
       secure: options.secure,
       sessionLength: options.sessionLength,
       cookieExpiryDays: options.cookieExpiryDays,
-      additionalParams: Object.getOwnPropertyNames(@_additionalParamsMap) })
+      initialUtmParams: options.initial_utm_params,
+      additionalParams: Object.getOwnPropertyNames(@_additionalParamsMap),
+      additionalInitialParams: Object.getOwnPropertyNames(@_additionalInitialParamsMap) })
 
     @addAllFields()
 
@@ -61,8 +71,15 @@ class UtmForm
       for param, fieldName of @_utmParamsMap
         @addFormElem form, fieldName, @utmCookie.readCookie(param)
 
+      for param, fieldName of @_initialUtmParamsMap
+        @addFormElem form, fieldName, @utmCookie.readCookie(param)
+
       for param, fieldName of @_additionalParamsMap
         @addFormElem form, fieldName, @utmCookie.readCookie(param)
+
+      for param, fieldName of @_additionalInitialParamsMap
+        cookieName = 'initial_' + param
+        @addFormElem form, fieldName, @utmCookie.readCookie(cookieName)
 
       @addFormElem form, @_initialReferrerField, @utmCookie.initialReferrer()
       @addFormElem form, @_lastReferrerField, @utmCookie.lastReferrer()

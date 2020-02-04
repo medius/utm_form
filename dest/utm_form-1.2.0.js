@@ -5,14 +5,20 @@ UtmCookie = class UtmCookie {
     this._cookieNamePrefix = '_uc_';
     this._domain = options.domain;
     this._secure = options.secure || false;
+    this._initialUtmParams = options.initialUtmParams || false;
     this._sessionLength = options.sessionLength || 1;
     this._cookieExpiryDays = options.cookieExpiryDays || 365;
     this._additionalParams = options.additionalParams || [];
+    this._additionalInitialParams = options.additionalInitialParams || [];
     this._utmParams = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'];
     this.writeInitialReferrer();
     this.writeLastReferrer();
     this.writeInitialLandingPageUrl();
+    this.writeAdditionalInitialParams();
     this.setCurrentSession();
+    if (this._initialUtmParams) {
+      this.writeInitialUtmCookieFromParams();
+    }
     if (this.additionalParamsPresentInUrl()) {
       this.writeAdditionalParams();
     }
@@ -33,7 +39,7 @@ UtmCookie = class UtmCookie {
     cookieExpire = expireDate != null ? '; expires=' + expireDate.toGMTString() : '';
     cookiePath = path != null ? '; path=' + path : '; path=/';
     cookieDomain = domain != null ? '; domain=' + domain : '';
-    cookieSecure = secure !== false ? '; secure' : '';
+    cookieSecure = secure ? '; secure' : '';
     document.cookie = this._cookieNamePrefix + name + '=' + escape(value) + cookieExpire + cookiePath + cookieDomain + cookieSecure;
   }
 
@@ -100,6 +106,14 @@ UtmCookie = class UtmCookie {
     this.createCookie(name, value, this._cookieExpiryDays, null, this._domain, this._secure);
   }
 
+  writeCookieOnce(name, value) {
+    var existingValue;
+    existingValue = this.readCookie(name);
+    if (!existingValue) {
+      this.writeCookie(name, value);
+    }
+  }
+
   writeAdditionalParams() {
     var j, len, param, ref, value;
     ref = this._additionalParams;
@@ -107,6 +121,17 @@ UtmCookie = class UtmCookie {
       param = ref[j];
       value = this.getParameterByName(param);
       this.writeCookie(param, value);
+    }
+  }
+
+  writeAdditionalInitialParams() {
+    var j, len, name, param, ref, value;
+    ref = this._additionalInitialParams;
+    for (j = 0, len = ref.length; j < len; j++) {
+      param = ref[j];
+      name = 'initial_' + param;
+      value = this.getParameterByName(param) || null;
+      this.writeCookieOnce(name, value);
     }
   }
 
@@ -120,11 +145,14 @@ UtmCookie = class UtmCookie {
     }
   }
 
-  writeCookieOnce(name, value) {
-    var existingValue;
-    existingValue = this.readCookie(name);
-    if (!existingValue) {
-      this.writeCookie(name, value);
+  writeInitialUtmCookieFromParams() {
+    var j, len, name, param, ref, value;
+    ref = this._utmParams;
+    for (j = 0, len = ref.length; j < len; j++) {
+      param = ref[j];
+      name = 'initial_' + param;
+      value = this.getParameterByName(param) || null;
+      this.writeCookieOnce(name, value);
     }
   }
 
@@ -222,7 +250,14 @@ UtmForm = class UtmForm {
     this._utmParamsMap.utm_campaign = options.utm_campaign_field || 'UCAMPAIGN';
     this._utmParamsMap.utm_content = options.utm_content_field || 'UCONTENT';
     this._utmParamsMap.utm_term = options.utm_term_field || 'UTERM';
+    this._initialUtmParamsMap = {};
+    this._initialUtmParamsMap.initial_utm_source = options.initial_utm_source_field || 'IUSOURCE';
+    this._initialUtmParamsMap.initial_utm_medium = options.initial_utm_medium_field || 'IUMEDIUM';
+    this._initialUtmParamsMap.initial_utm_campaign = options.initial_utm_campaign_field || 'IUCAMPAIGN';
+    this._initialUtmParamsMap.initial_utm_content = options.initial_utm_content_field || 'IUCONTENT';
+    this._initialUtmParamsMap.initial_utm_term = options.initial_utm_term_field || 'IUTERM';
     this._additionalParamsMap = options.additional_params_map || {};
+    this._additionalInitialParamsMap = options.additional_initial_params_map || {};
     this._initialReferrerField = options.initial_referrer_field || 'IREFERRER';
     this._lastReferrerField = options.last_referrer_field || 'LREFERRER';
     this._initialLandingPageField = options.initial_landing_page_field || 'ILANDPAGE';
@@ -239,7 +274,9 @@ UtmForm = class UtmForm {
       secure: options.secure,
       sessionLength: options.sessionLength,
       cookieExpiryDays: options.cookieExpiryDays,
-      additionalParams: Object.getOwnPropertyNames(this._additionalParamsMap)
+      initialUtmParams: options.initial_utm_params,
+      additionalParams: Object.getOwnPropertyNames(this._additionalParamsMap),
+      additionalInitialParams: Object.getOwnPropertyNames(this._additionalInitialParamsMap)
     });
     this.addAllFields();
   }
@@ -262,7 +299,7 @@ UtmForm = class UtmForm {
   }
 
   addAllFieldsToForm(form) {
-    var fieldName, param, ref, ref1;
+    var cookieName, fieldName, param, ref, ref1, ref2, ref3;
     if (form && !form._utm_tagged) {
       form._utm_tagged = true;
       ref = this._utmParamsMap;
@@ -270,10 +307,21 @@ UtmForm = class UtmForm {
         fieldName = ref[param];
         this.addFormElem(form, fieldName, this.utmCookie.readCookie(param));
       }
-      ref1 = this._additionalParamsMap;
+      ref1 = this._initialUtmParamsMap;
       for (param in ref1) {
         fieldName = ref1[param];
         this.addFormElem(form, fieldName, this.utmCookie.readCookie(param));
+      }
+      ref2 = this._additionalParamsMap;
+      for (param in ref2) {
+        fieldName = ref2[param];
+        this.addFormElem(form, fieldName, this.utmCookie.readCookie(param));
+      }
+      ref3 = this._additionalInitialParamsMap;
+      for (param in ref3) {
+        fieldName = ref3[param];
+        cookieName = 'initial_' + param;
+        this.addFormElem(form, fieldName, this.utmCookie.readCookie(cookieName));
       }
       this.addFormElem(form, this._initialReferrerField, this.utmCookie.initialReferrer());
       this.addFormElem(form, this._lastReferrerField, this.utmCookie.lastReferrer());

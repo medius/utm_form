@@ -13,11 +13,13 @@ visited your website 3 times before giving you his email address.
 
 **Information it adds to your forms:**
 * 5 UTM parameters - Any UTM parameters in the URL that a visitor used to come to your website will be added to the form
+* 5 Initial UTM parameters (optional) - The UTM parameters in the very first URL that the visitor used
 * Initial Referrer - The webpage where the visitor came from for the first time
 * Last Referrer - The webpage where the visitor came from most recently
 * Initial Landing page - URL of the page on your website where the visitor landed the very first time
 * Number of visits - The number of times the visitor came to your website before filling your form
 * Additional parameters defined in `additional_params_map`
+* Additional initial parameters defined in `additional_initial_params_map`
 
 ## How do I use it?
 
@@ -82,7 +84,7 @@ Once the script is added, your form will look like this after the page is loaded
 When someone submits the form, all the extra information is also sent along with the email address.
 
 You'll need to make sure that your form can accept these values. If it is a Mailchimp form, configure it to
-accept these fields. Same for ConstantContact, CampaignMonitor, Hubspot or any other service.
+accept these fields. Same for ConstantContact, CampaignMonitor, Hubspot, ActiveCampaign or any other service.
 
 ## Customize your forms
 If you would like to customize how fields get added to your form, following options are available:
@@ -98,13 +100,24 @@ If you would like to customize how fields get added to your form, following opti
   _uf.utm_content_field          = "YOUR_CONTENT_FIELD"; // Default 'UCONTENT'
   _uf.utm_term_field             = "YOUR_TERM_FIELD"; // Default 'UTERM'
 
+  _uf.initial_utm_params         = true; // Enable the tracking of initial UTM Parameters
+  _uf.initial_utm_source_field   = "YOUR_INITIAL_SOURCE_FIELD"; // Default 'IUSOURCE'
+  _uf.initial_utm_medium_field   = "YOUR_INITIAL_MEDIUM_FIELD"; // Default 'IUMEDIUM'
+  _uf.initial_utm_campaign_field = "YOUR_INITIAL_CAMPAIGN_FIELD"; // Default 'IUCAMPAIGN'
+  _uf.initial_utm_content_field  = "YOUR_INITIAL_CONTENT_FIELD"; // Default 'IUCONTENT'
+  _uf.initial_utm_term_field     = "YOUR_INITIAL_TERM_FIELD"; // Default 'IUTERM'
+
   _uf.initial_referrer_field     = "YOUR_INITIAL_REFERRER_FIELD"; // Default 'IREFERRER'
   _uf.last_referrer_field        = "YOUR_LAST_REFERRER_FIELD"; // Default 'LREFERRER'
   _uf.initial_landing_page_field = "YOUR_INITIAL_LANDING_PAGE_FIELD"; // Default 'ILANDPAGE'
   _uf.visits_field               = "YOUR_VISITS_FIELD"; // Default 'VISITS'
+  
   _uf.additional_params_map      = {
     affiliate: "AFFILIATE"
   }; // Maps affiliate parameter to AFFILIATE form field
+  _uf.additional_initial_params_map      = {
+    affiliate: "IAFFILIATE"
+  }; // Maps the initial affiliate parameter to IAFFILIATE form field
 
   _uf.secure                     = true; // Enable secure cookies
   _uf.sessionLength              = 2; // In hours. Default is 1 hour
