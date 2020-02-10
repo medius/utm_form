@@ -43,6 +43,7 @@ class UtmForm
       sessionLength: options.sessionLength,
       cookieExpiryDays: options.cookieExpiryDays,
       initialUtmParams: options.initial_utm_params,
+      trackLastParams: options.track_last_params,
       additionalParams: Object.getOwnPropertyNames(@_additionalParamsMap),
       additionalInitialParams: Object.getOwnPropertyNames(@_additionalInitialParamsMap) })
 

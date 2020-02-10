@@ -4,6 +4,7 @@ class UtmCookie
     @_domain = options.domain
     @_secure = options.secure || false
     @_initialUtmParams = options.initialUtmParams || false
+    @_trackLastParams = options.trackLastParams || false
     @_sessionLength = options.sessionLength || 1
     @_cookieExpiryDays = options.cookieExpiryDays || 365
     @_additionalParams = options.additionalParams || []
@@ -25,11 +26,14 @@ class UtmCookie
     if @_initialUtmParams
       @writeInitialUtmCookieFromParams()
 
-    if @additionalParamsPresentInUrl()
+    if @_trackLastParams
       @writeAdditionalParams()
-
-    if @utmPresentInUrl()
       @writeUtmCookieFromParams()
+    else
+      if @additionalParamsPresentInUrl()
+        @writeAdditionalParams()
+      if @utmPresentInUrl()
+        @writeUtmCookieFromParams()
 
     return
 
@@ -72,7 +76,7 @@ class UtmCookie
     if results
       decodeURIComponent results[1].replace(/\+/g, ' ')
     else
-      ''
+      null
 
   additionalParamsPresentInUrl: ->
     for param in @_additionalParams
@@ -105,7 +109,7 @@ class UtmCookie
   writeAdditionalInitialParams: ->
     for param in @_additionalInitialParams
       name = 'initial_' + param
-      value = @getParameterByName(param) || null
+      value = @getParameterByName(param)
       @writeCookieOnce name, value
     return
 
@@ -118,7 +122,7 @@ class UtmCookie
   writeInitialUtmCookieFromParams: ->
     for param in @_utmParams
       name = 'initial_' + param
-      value = @getParameterByName(param) || null
+      value = @getParameterByName(param)
       @writeCookieOnce name, value
     return
 
