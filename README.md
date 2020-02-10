@@ -119,6 +119,7 @@ If you would like to customize how fields get added to your form, following opti
     affiliate: "IAFFILIATE"
   }; // Maps the initial affiliate parameter to IAFFILIATE form field
 
+  _uf.track_last_params          = true; // Enable the tracking of last parameters even if null
   _uf.secure                     = true; // Enable secure cookies
   _uf.sessionLength              = 2; // In hours. Default is 1 hour
   _uf.add_to_form                = "first"; // 'none', 'all', 'first'. Default is 'all'
