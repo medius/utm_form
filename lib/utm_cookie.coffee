@@ -74,7 +74,8 @@ class UtmCookie
     regex = new RegExp(regexS)
     results = regex.exec(window.location.search)
     if results
-      decodeURIComponent results[1].replace(/\+/g, ' ')
+      value = decodeURIComponent results[1].replace(/\+/g, ' ')
+      if value.length > 0 then value else null
     else
       null
 
