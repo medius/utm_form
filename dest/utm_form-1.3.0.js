@@ -6,7 +6,7 @@ UtmCookie = class UtmCookie {
     this._domain = options.domain;
     this._secure = options.secure || false;
     this._initialUtmParams = options.initialUtmParams || false;
-    this._trackLastParams = options.trackLastParams || false;
+    this._trackNullParams = options.trackNullParams || false;
     this._sessionLength = options.sessionLength || 1;
     this._cookieExpiryDays = options.cookieExpiryDays || 365;
     this._additionalParams = options.additionalParams || [];
@@ -16,13 +16,14 @@ UtmCookie = class UtmCookie {
     this.writeLastReferrer();
     this.writeInitialLandingPageUrl();
     this.writeAdditionalInitialParams();
-    this.setCurrentSession();
     if (this._initialUtmParams) {
       this.writeInitialUtmCookieFromParams();
     }
-    if (this._trackLastParams) {
-      this.writeAdditionalParams();
-      this.writeUtmCookieFromParams();
+    if (this._trackNullParams) {
+      if (!this.getCurrentSession()) {
+        this.writeAdditionalParams();
+        this.writeUtmCookieFromParams();
+      }
     } else {
       if (this.additionalParamsPresentInUrl()) {
         this.writeAdditionalParams();
@@ -31,6 +32,7 @@ UtmCookie = class UtmCookie {
         this.writeUtmCookieFromParams();
       }
     }
+    this.setCurrentSession();
     return;
   }
 
@@ -233,6 +235,12 @@ UtmCookie = class UtmCookie {
     return this.readCookie('visits');
   }
 
+  getCurrentSession() {
+    var cookieName;
+    cookieName = 'current_session';
+    return this.readCookie(cookieName);
+  }
+
   setCurrentSession() {
     var cookieName, existingValue;
     cookieName = 'current_session';
@@ -286,7 +294,7 @@ UtmForm = class UtmForm {
       sessionLength: options.sessionLength,
       cookieExpiryDays: options.cookieExpiryDays,
       initialUtmParams: options.initial_utm_params,
-      trackLastParams: options.track_last_params,
+      trackNullParams: options.track_null_params,
       additionalParams: Object.getOwnPropertyNames(this._additionalParamsMap),
       additionalInitialParams: Object.getOwnPropertyNames(this._additionalInitialParamsMap)
     });

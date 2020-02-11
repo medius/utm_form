@@ -4,7 +4,7 @@ class UtmCookie
     @_domain = options.domain
     @_secure = options.secure || false
     @_initialUtmParams = options.initialUtmParams || false
-    @_trackLastParams = options.trackLastParams || false
+    @_trackNullParams = options.trackNullParams || false
     @_sessionLength = options.sessionLength || 1
     @_cookieExpiryDays = options.cookieExpiryDays || 365
     @_additionalParams = options.additionalParams || []
@@ -21,20 +21,21 @@ class UtmCookie
     @writeLastReferrer()
     @writeInitialLandingPageUrl()
     @writeAdditionalInitialParams()
-    @setCurrentSession()
 
     if @_initialUtmParams
       @writeInitialUtmCookieFromParams()
 
-    if @_trackLastParams
-      @writeAdditionalParams()
-      @writeUtmCookieFromParams()
+    if @_trackNullParams
+      if !@getCurrentSession()
+        @writeAdditionalParams()
+        @writeUtmCookieFromParams()
     else
       if @additionalParamsPresentInUrl()
         @writeAdditionalParams()
       if @utmPresentInUrl()
         @writeUtmCookieFromParams()
 
+    @setCurrentSession()
     return
 
   createCookie: (name, value, days, path, domain, secure) ->
@@ -176,6 +177,10 @@ class UtmCookie
 
   visits: ->
     @readCookie 'visits'
+
+  getCurrentSession: ->
+    cookieName = 'current_session'
+    return @readCookie(cookieName)
 
   setCurrentSession: ->
     cookieName = 'current_session'
