@@ -6,7 +6,7 @@ UtmCookie = class UtmCookie {
     this._domain = options.domain;
     this._secure = options.secure || false;
     this._initialUtmParams = options.initialUtmParams || false;
-    this._trackNullParams = options.trackNullParams || false;
+    this._resetParams = options.resetParams || false;
     this._sessionLength = options.sessionLength || 1;
     this._cookieExpiryDays = options.cookieExpiryDays || 365;
     this._additionalParams = options.additionalParams || [];
@@ -19,7 +19,7 @@ UtmCookie = class UtmCookie {
     if (this._initialUtmParams) {
       this.writeInitialUtmCookieFromParams();
     }
-    if (this._trackNullParams) {
+    if (this._resetParams) {
       if (!this.getCurrentSession()) {
         this.writeAdditionalParams();
         this.writeUtmCookieFromParams();
@@ -52,7 +52,7 @@ UtmCookie = class UtmCookie {
   }
 
   readCookie(name) {
-    var c, ca, i, nameEQ;
+    var c, ca, i, nameEQ, value;
     nameEQ = this._cookieNamePrefix + name + '=';
     ca = document.cookie.split(';');
     i = 0;
@@ -62,7 +62,10 @@ UtmCookie = class UtmCookie {
         c = c.substring(1, c.length);
       }
       if (c.indexOf(nameEQ) === 0) {
-        return c.substring(nameEQ.length, c.length);
+        value = c.substring(nameEQ.length, c.length);
+        if (value !== 'null') {
+          return value;
+        }
       }
       i++;
     }
@@ -294,7 +297,7 @@ UtmForm = class UtmForm {
       sessionLength: options.sessionLength,
       cookieExpiryDays: options.cookieExpiryDays,
       initialUtmParams: options.initial_utm_params,
-      trackNullParams: options.track_null_params,
+      resetParams: options.reset_params_at_session_end,
       additionalParams: Object.getOwnPropertyNames(this._additionalParamsMap),
       additionalInitialParams: Object.getOwnPropertyNames(this._additionalInitialParamsMap)
     });
@@ -361,7 +364,7 @@ UtmForm = class UtmForm {
     fieldEl = document.createElement('input');
     fieldEl.type = "hidden";
     fieldEl.name = fieldName;
-    fieldEl.value = this._decodeURIs ? decodeURIComponent(fieldValue) : fieldValue;
+    fieldEl.value = fieldValue ? this._decodeURIs ? decodeURIComponent(fieldValue) : fieldValue : fieldValue;
     return fieldEl;
   }
 

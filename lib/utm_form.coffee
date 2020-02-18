@@ -43,7 +43,7 @@ class UtmForm
       sessionLength: options.sessionLength,
       cookieExpiryDays: options.cookieExpiryDays,
       initialUtmParams: options.initial_utm_params,
-      trackNullParams: options.track_null_params,
+      resetParams: options.reset_params_at_session_end,
       additionalParams: Object.getOwnPropertyNames(@_additionalParamsMap),
       additionalInitialParams: Object.getOwnPropertyNames(@_additionalInitialParamsMap) })
 
@@ -100,7 +100,7 @@ class UtmForm
     fieldEl = document.createElement('input')
     fieldEl.type = "hidden"
     fieldEl.name = fieldName
-    fieldEl.value = if @_decodeURIs then decodeURIComponent(fieldValue) else fieldValue
+    fieldEl.value = if fieldValue then if @_decodeURIs then decodeURIComponent(fieldValue) else fieldValue else fieldValue
     fieldEl
 
   insertAfter: (newNode, referenceNode) ->

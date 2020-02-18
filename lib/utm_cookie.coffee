@@ -4,7 +4,7 @@ class UtmCookie
     @_domain = options.domain
     @_secure = options.secure || false
     @_initialUtmParams = options.initialUtmParams || false
-    @_trackNullParams = options.trackNullParams || false
+    @_resetParams = options.resetParams || false
     @_sessionLength = options.sessionLength || 1
     @_cookieExpiryDays = options.cookieExpiryDays || 365
     @_additionalParams = options.additionalParams || []
@@ -25,7 +25,7 @@ class UtmCookie
     if @_initialUtmParams
       @writeInitialUtmCookieFromParams()
 
-    if @_trackNullParams
+    if @_resetParams
       if !@getCurrentSession()
         @writeAdditionalParams()
         @writeUtmCookieFromParams()
@@ -61,7 +61,9 @@ class UtmCookie
       while c.charAt(0) == ' '
         c = c.substring(1, c.length)
       if c.indexOf(nameEQ) == 0
-        return c.substring(nameEQ.length, c.length)
+        value = c.substring(nameEQ.length, c.length)
+        if value != 'null'
+          return value
       i++
     null
 
