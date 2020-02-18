@@ -119,12 +119,13 @@ If you would like to customize how fields get added to your form, following opti
     affiliate: "IAFFILIATE"
   }; // Maps the initial affiliate parameter to IAFFILIATE form field
 
-  _uf.secure                     = true; // Enable secure cookies
-  _uf.sessionLength              = 2; // In hours. Default is 1 hour
-  _uf.add_to_form                = "first"; // 'none', 'all', 'first'. Default is 'all'
-  _uf.form_query_selector        = 'form[action="/sign_up"]'; // custom form selector. Default is 'form', to select any form.
-  _uf.decode_uris                = true; // Decode URLs before populating the form. e.g. use "https://" instead of "https%3A//".
-                                         // NOTE: This will decode the entire URL and, in rare cases, may have side effects.
+  _uf.reset_params_at_session_end = true; // Default: false. Use empty string values if UTM not present in the same session as the form submit
+  _uf.secure                      = true; // Enable secure cookies
+  _uf.sessionLength               = 2; // In hours. Default is 1 hour
+  _uf.add_to_form                 = "first"; // 'none', 'all', 'first'. Default is 'all'
+  _uf.form_query_selector         = 'form[action="/sign_up"]'; // custom form selector. Default is 'form', to select any form.
+  _uf.decode_uris                 = true; // Decode URLs before populating the form. e.g. use "https://" instead of "https%3A//".
+                                          // NOTE: This will decode the entire URL and, in rare cases, may have side effects.
 </script>
 
 <script src="https://d12ue6f2329cfl.cloudfront.net/resources/utm_form-1.2.0.min.js" async></script>

@@ -4,6 +4,7 @@ class UtmCookie
     @_domain = options.domain
     @_secure = options.secure || false
     @_initialUtmParams = options.initialUtmParams || false
+    @_resetParams = options.resetParams || false
     @_sessionLength = options.sessionLength || 1
     @_cookieExpiryDays = options.cookieExpiryDays || 365
     @_additionalParams = options.additionalParams || []
@@ -20,17 +21,21 @@ class UtmCookie
     @writeLastReferrer()
     @writeInitialLandingPageUrl()
     @writeAdditionalInitialParams()
-    @setCurrentSession()
 
     if @_initialUtmParams
       @writeInitialUtmCookieFromParams()
 
-    if @additionalParamsPresentInUrl()
-      @writeAdditionalParams()
+    if @_resetParams
+      if !@getCurrentSession()
+        @writeAdditionalParams()
+        @writeUtmCookieFromParams()
+    else
+      if @additionalParamsPresentInUrl()
+        @writeAdditionalParams()
+      if @utmPresentInUrl()
+        @writeUtmCookieFromParams()
 
-    if @utmPresentInUrl()
-      @writeUtmCookieFromParams()
-
+    @setCurrentSession()
     return
 
   createCookie: (name, value, days, path, domain, secure) ->
@@ -56,7 +61,9 @@ class UtmCookie
       while c.charAt(0) == ' '
         c = c.substring(1, c.length)
       if c.indexOf(nameEQ) == 0
-        return c.substring(nameEQ.length, c.length)
+        value = c.substring(nameEQ.length, c.length)
+        if value != 'null'
+          return value
       i++
     null
 
@@ -70,9 +77,10 @@ class UtmCookie
     regex = new RegExp(regexS)
     results = regex.exec(window.location.search)
     if results
-      decodeURIComponent results[1].replace(/\+/g, ' ')
+      value = decodeURIComponent results[1].replace(/\+/g, ' ')
+      if value.length > 0 then value else null
     else
-      ''
+      null
 
   additionalParamsPresentInUrl: ->
     for param in @_additionalParams
@@ -105,7 +113,7 @@ class UtmCookie
   writeAdditionalInitialParams: ->
     for param in @_additionalInitialParams
       name = 'initial_' + param
-      value = @getParameterByName(param) || null
+      value = @getParameterByName(param)
       @writeCookieOnce name, value
     return
 
@@ -118,7 +126,7 @@ class UtmCookie
   writeInitialUtmCookieFromParams: ->
     for param in @_utmParams
       name = 'initial_' + param
-      value = @getParameterByName(param) || null
+      value = @getParameterByName(param)
       @writeCookieOnce name, value
     return
 
@@ -171,6 +179,10 @@ class UtmCookie
 
   visits: ->
     @readCookie 'visits'
+
+  getCurrentSession: ->
+    cookieName = 'current_session'
+    return @readCookie(cookieName)
 
   setCurrentSession: ->
     cookieName = 'current_session'
